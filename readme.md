@@ -194,7 +194,7 @@ ipconfig /all
 
 <details>
   <summary><strong>📸︲Vérification</strong></summary>
-  <img src="captures/2026-03-25 12_25_08-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
+  <img src="captures/2026-04-30 13_19_27-GALL COSMETIC - Windows 11 sur STBN-DELL5510 - Connexion à un ordinateur virtuel.png"/>
 </details>
 
 ---
