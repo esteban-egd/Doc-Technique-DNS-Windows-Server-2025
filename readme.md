@@ -172,84 +172,6 @@ Afin que les clients reçoivent automatiquement l'adresse du serveur DNS :
 </details>
 
 ## `🛠️` ︲ Étape 5 : Vérification côté client
-... [rest of the file remains as it was before the deletion] ...
-
-# `🧩` ︲ Mission 1 : Préparer le serveur Windows
-
-## `🎯` ︲ Objectif
-
-Renommer le serveur, installer le rôle DNS et configurer le serveur pour qu'il utilise sa propre adresse IP comme serveur DNS.
-
-> [!TIP]
-> Pour afficher les captures d'écrans, cliquez sur le menu déroulant avec l'émoji : 📸
-
-## `🛠️` ︲ Étape 1 : Renommer le serveur
-
-1. Ouvrir le `Gestionnaire de serveur` si celui ci ne l'est pas déjà.
-2. Aller dans `Serveur local`.
-3. Cliquer sur le nom actuel du serveur.
-4. Dans l'onglet `Nom de l'ordinateur`, cliquer sur `Modifier`.
-5. Saisir le nouveau nom : `srv-win`.
-6. Redémarrer le serveur pour appliquer le changement.
-
-<details>
-  <summary><strong>📸︲Renommage du serveur</strong></summary>
-  <img src="captures/2026-03-25 12_06_10-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
-</details>
-
-## `🛠️` ︲ Étape 2 : Installer le rôle DNS
-
-1. Se rendre dans le `Gestionnaire de serveur`.
-2. Cliquer sur `Gérer` puis `Ajouter des rôles et fonctionnalités`.
-3. Sélectionner `Installation basée sur un rôle ou une fonctionnalité`.
-4. Choisir le `serveur local`.
-5. Cocher le rôle `Serveur DNS`.
-6. `Valider` et lancer l'installation.
-
-<details>
-  <summary><strong>📸︲Installation du rôle DNS</strong></summary>
-  <img src="captures/2026-03-25 12_02_33-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
-  <br>
-  <img src="captures/2026-03-25 12_09_03-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
-</details>
-
-## `🛠️` ︲ Étape 3 : Configurer l'adresse IP du serveur DNS
-
-Dans la configuration réseau du serveur, il faut indiquer `sa propre adresse IP` comme **serveur DNS préféré** :
-
-Pour ce faire, 
-1. Dans le `Gestionnaire de serveur` puis cliquer sur l'onglet `Serveur local` dans le menu gauche.
-1. Cliquer sur `l'IP`.
-2. Dans la nouvelle fenêtre qui s'affiche `double cliquer` sur la carte `Ethernet`, puis `Protocole Internet version 4`.
-3. Dans la partie `Utiliser l'addresse de serveur DNS suivante :` saisir `192.168.0.1` dans `Serveur DNS préféré`. 
-
-<details>
-  <summary><strong>📸︲Configuration DNS</strong></summary>
-  <img src="captures/2026-03-25 12_22_03-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
-</details>
-
-## `🛠️` ︲ Étape 4 : Ajouter l'option DNS dans le service DHCP
-
-Afin que les clients reçoivent automatiquement l'adresse du serveur DNS :
-
-1. Ouvrir la console `DHCP`, pour ce faire dans le `Gestionnaire de Serveur` cliquer sur `Outils` puis `DHCP`.
-2. Aller dans `win-srv` → `IPv4` → `Étendue [192.168.0.0] Réseau local` puis `Options d'étendue`.
-3. `Clic droit` et `Configurer les options`.
-4. Cocher l'option `006 - Serveurs DNS`.
-5. `Ajouter` l'adresse IP : `192.168.0.1` puis valider.
-
-<details>
-  <summary><strong>📸︲Installation du Service DNS</strong></summary>
-  <img src="captures/2026-03-25 12_10_27-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
-  <br>
-  <img src="captures/2026-03-25 12_20_56-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
-  <br>
-  <img src="captures/2026-03-25 12_21_30-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
-  <br>
-  <img src="captures/2026-03-25 12_23_12-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
-</details>
-
-## `🛠️` ︲ Étape 5 : Vérification côté client
 
 Sur le client Windows 11 :
 
@@ -583,7 +505,7 @@ ping srv-web.galcosmetic.fr
 
 ---
 
-## `🛠️` ︲ Étape 6 : Ping inverse avec l'option `-a`
+## `🛠️` ︲ Étape 6 : Ping inverse with the option `-a`
 
 ```
 ping -a 192.168.0.3
@@ -755,7 +677,7 @@ Configurer le serveur DNS local pour transmettre les requêtes externes (non loc
 
 ## `🛠️` ︲ Procédure
 
-1. Dans le **Gestionnaire DNS**, faire un `clic droit` sur le nom du serveur.
+1. Dans le **Gestionnaire DNS**, faire un `clic droit` on the name of the server.
 2. Sélectionner **`Propriétés`** → onglet **`Redirecteurs`**.
 3. Cliquer sur **`Modifier`**.
 4. Ajouter l'adresse IP du routeur : `192.168.0.254`
@@ -793,7 +715,7 @@ Installer un serveur DNS secondaire (`srv-win2`) qui réplique la zone du serveu
 ## `🛠️` ︲ Étape 2 : Créer la zone secondaire sur `srv-win2`
 
 1. Dans le Gestionnaire DNS de `srv-win2`.
-2. `Clic droit` sur **`Zones de recherche directes`** → **`Nouvelle zone`**.
+2. `Clic droit` on **`Zones de recherche directes`** → **`Nouvelle zone`**.
 3. Choisir **`Zone secondaire`**.
 4. Saisir le nom : **`galcosmetic.fr`**
 5. Indiquer l'adresse IP du **serveur maître** : `192.168.0.1`
@@ -809,7 +731,7 @@ Installer un serveur DNS secondaire (`srv-win2`) qui réplique la zone du serveu
 
 Sur le **serveur principal** :
 
-1. Dans le Gestionnaire DNS, `clic droit` sur la zone `galcosmetic.fr`.
+1. Dans le Gestionnaire DNS, `clic droit` on the zone `galcosmetic.fr`.
 2. Sélectionner **`Propriétés`** → onglet **`Serveurs de noms`**.
 3. Cliquer sur **`Ajouter`**.
 4. Saisir le FQDN ou le nom court de `srv-win2`.
@@ -942,8 +864,6 @@ host -t type nom_à_chercher [IPserveurDNS]
 | 6   | `fnac.fr`       | `host -t A fnac.fr`       | À compléter |
 | 7   | `iut-tarbes.fr` | `host -t A iut-tarbes.fr` | À compléter |
 | 8   | `debian.org`    | `host -t A debian.org`    | À compléter |
-
----
 
 ---
 
