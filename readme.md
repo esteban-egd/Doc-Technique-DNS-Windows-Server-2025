@@ -170,17 +170,17 @@ Sur le client Windows 11 :
 1. Ouvrir une `Invite de commandes`.
 2. Renouveler l'adresse IP :
 
-```batch
+```cmd
 ipconfig /release
 ```
 et 
-```batch
+```cmd
 ipconfig /renew
 ```
 
 3. Vérifier que le serveur DNS est bien `192.168.0.1` avec la commande:
 
-```batch
+```cmd
 ipconfig /all
 ```
 
@@ -262,7 +262,7 @@ Vérifier la communication entre le client et le serveur Web, et observer le com
 
 Depuis le client Windows 11, exécuter :
 
-```batch
+```cmd
 ping 192.168.0.3
 ```
 
