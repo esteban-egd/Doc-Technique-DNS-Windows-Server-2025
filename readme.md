@@ -170,17 +170,17 @@ Sur le client Windows 11 :
 1. Ouvrir une `Invite de commandes`.
 2. Renouveler l'adresse IP :
 
-```bash
+```batch
 ipconfig /release
 ```
 et 
-```bash
+```batch
 ipconfig /renew
 ```
 
 3. Vérifier que le serveur DNS est bien `192.168.0.1` avec la commande:
 
-```bash
+```batch
 ipconfig /all
 ```
 
@@ -204,7 +204,7 @@ Démarrer le serveur Web et lui attribuer une adresse IP statique conforme au sc
 1. **Démarrer** la VM `srv-web`.
 2. Identifier son adresse IP actuelle (attribuée dynamiquement par le DHCP) :
 
-```
+```bash
 ip a
 ```
 
@@ -233,7 +233,7 @@ netmask 255.255.255.0
 dns-nameservers 192.168.0.1
 ```
 Puis redémarrer avec :
-```
+```bash
 sudo reboot
 ```
 <details>
@@ -262,7 +262,7 @@ Vérifier la communication entre le client et le serveur Web, et observer le com
 
 Depuis le client Windows 11, exécuter :
 
-```bash
+```batch
 ping 192.168.0.3
 ```
 
@@ -279,7 +279,7 @@ Le ping doit aboutir, confirmant la communication réseau entre les deux machine
 
 Sur le client, ouvrir un navigateur et saisir :
 
-```
+```text
 http://192.168.0.3
 ```
 
@@ -297,13 +297,13 @@ http://192.168.0.3
 1. Ouvrir **Wireshark** sur le client Windows 11.
 2. Démarrer une capture sur l'interface **Ethernet** avec le filtre :
 
-```
+```text
 port 53
 ```
 
 3. Dans un navigateur, accéder à :
 
-```
+```text
 http://srv-web.galcosmetic.fr
 ```
 
