@@ -24,10 +24,12 @@ Ce dépôt présente une documentation technique détaillée sur la mise en plac
 
 ---
 
+<a id="introduction"></a>
 # `📘` ︲ Introduction
 
 ---
 
+<a id="contexte"></a>
 ## `❔` ︲ Contexte et objectifs du TP
 
 > [!NOTE]
@@ -35,6 +37,7 @@ Ce dépôt présente une documentation technique détaillée sur la mise en plac
 
 ---
 
+<a id="outils"></a>
 ## `🧰` ︲ Présentation des outils et prérequis
 
 > [!IMPORTANT]
@@ -96,6 +99,7 @@ graph TD
 ```
 ---
 
+<a id="mission1"></a>
 # `🧩` ︲ Mission 1 : Préparer le serveur Windows
 
 ## `🎯` ︲ Objectif
@@ -199,6 +203,7 @@ ipconfig /all
 
 ---
 
+<a id="mission2"></a>
 # `🧩` ︲ Mission 2 : Préparer le serveur Web
 
 ## `🎯` ︲ Objectif
@@ -258,6 +263,7 @@ sudo reboot
 
 ---
 
+<a id="mission3"></a>
 # `🧩` ︲ Mission 3 : Tester le fonctionnement du serveur Web
 
 ## `🎯` ︲ Objectif
@@ -344,6 +350,7 @@ http://srv-web.galcosmetic.fr
 
 ---
 
+<a id="mission4"></a>
 # `🧩` ︲ Mission 4 : Configurer le service DNS
 
 
@@ -400,6 +407,7 @@ Créer les zones de recherche directe et inversée pour le domaine `galcosmetic.
 
 ---
 
+<a id="mission5"></a>
 # `🧩` ︲ Mission 5 : Créer des hôtes et tester leur fonctionnement
 
 ## `🎯` ︲ Objectif
@@ -535,6 +543,7 @@ ping -a 192.168.0.3
 
 ---
 
+<a id="mission6"></a>
 # `🧩` ︲ Mission 6 : Créer des alias (CNAME)
 
 ## `🎯` ︲ Objectif
@@ -592,6 +601,7 @@ Sur le client Windows 11 :
 
 ---
 
+<a id="mission7"></a>
 # `🧩` ︲ Mission 7 : Observer et analyser le fichier de configuration DNS
 
 ## `🎯` ︲ Objectif
@@ -616,6 +626,7 @@ Observer physiquement la structure d'un fichier de zone sur le serveur Windows.
 
 ---
 
+<a id="mission8"></a>
 # `🧩` ︲ Mission 8 : Observer le référencement des serveurs racines
 
 ## `🎯` ︲ Objectif
@@ -641,6 +652,7 @@ Visualiser les serveurs racines par défaut du serveur DNS.
 
 ---
 
+<a id="mission9"></a>
 # `🧩` ︲ Mission 9 : Configurer un redirecteur DNS
 
 ## `🎯` ︲ Objectif
@@ -663,6 +675,7 @@ Permettre au serveur de résoudre des noms de domaines externes (Internet) en tr
 
 ---
 
+<a id="mission11"></a>
 # `🧩` ︲ Mission 11 : Louer un nom de domaine
 
 ## `🎯` ︲ Objectif
@@ -681,6 +694,7 @@ Comprendre l'utilité d'un Bureau d'enregistrement.
 
 ---
 
+<a id="mission12"></a>
 # `🧩` ︲ Mission 12 : Identifier les adresses IP de serveurs
 
 ## `🎯` ︲ Objectif
@@ -723,6 +737,7 @@ afin de retourner l'ip du serveur web `www.galcosmetic.fr`.
 ---
 
 
+<a id="concepts-dns"></a>
 # `📖` ︲ Concepts DNS
 
 ## `🔍` ︲ Rôles des zones Directe et Inversée
