@@ -13,6 +13,13 @@ Ce dépôt présente une documentation technique détaillée sur la mise en plac
 - [🧩 ︲ Mission 2 : Préparer le serveur Web](#mission2)
 - [🧩 ︲ Mission 3 : Tester le fonctionnement du serveur Web](#mission3)
 - [🧩 ︲ Mission 4 : Configurer le service DNS](#mission4)
+- [🧩 ︲ Mission 6 : Créer des alias (CNAME)](#mission6)
+- [🧩 ︲ Mission 7 : Analyser le fichier de zone DNS](#mission7)
+- [🧩 ︲ Mission 8 : Observer les serveurs racines](#mission8)
+- [🧩 ︲ Mission 9 : Configurer un redirecteur](#mission9)
+- [🧩 ︲ Mission 10 : Gérer la zone inversée (PTR)](#mission10)
+- [🧩 ︲ Mission 11 : Louer un nom de domaine](#mission11)
+- [🧩 ︲ Mission 12 : DNS sous Linux (Bind9)](#mission12)
 
 ---
 
@@ -388,6 +395,175 @@ Créer les zones de recherche directe et inversée pour le domaine `galcosmetic.
   <img src="captures/2026-04-30 11_39_00-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
   <br>
   <img src="captures/2026-04-30 11_40_29-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
+</details>
+
+---
+
+# `🧩` ︲ Mission 6 : Créer des alias (CNAME)
+
+---
+
+## `🎯` ︲ Objectif
+
+Créer des alias (CNAME) pour permettre d'accéder au serveur web via différents noms (`www` et `spike`).
+
+---
+
+## `🛠️` ︲ Procédure
+
+1. Dans le **Gestionnaire DNS**, faire un `clic droit` sur la zone `galcosmetic.fr`.
+2. Sélectionner **Nouvel alias (CNAME)**.
+3. Remplir les informations suivantes :
+   - Alias : `www` -> FQDN : `srv-web.galcosmetic.fr`
+   - Alias : `spike` -> FQDN : `srv-web.galcosmetic.fr`
+
+<details>
+  <summary><strong>📸︲Création des alias CNAME</strong></summary>
+  <img src=""/>
+</details>
+
+## `👉` ︲ Vérification
+
+Tester la résolution depuis le client Windows 11 :
+```cmd
+nslookup www.galcosmetic.fr
+```
+
+---
+
+# `🧩` ︲ Mission 7 : Analyser le fichier de zone DNS
+
+---
+
+## `🎯` ︲ Objectif
+
+Visualiser comment Windows stocke les informations de zone en format texte.
+
+---
+
+## `🛠️` ︲ Procédure
+
+1. Se rendre dans le dossier : `C:\Windows\System32\dns`.
+2. Ouvrir le fichier `galcosmetic.fr.dns` avec le **Bloc-notes**.
+
+<details>
+  <summary><strong>📸︲Analyse du fichier de zone</strong></summary>
+  <img src=""/>
+</details>
+
+---
+
+# `🧩` ︲ Mission 8 : Observer les serveurs racines
+
+---
+
+## `🎯` ︲ Objectif
+
+Identifier les serveurs DNS racines (Root Hints) configurés par défaut.
+
+---
+
+## `🛠️` ︲ Procédure
+
+1. Dans le **Gestionnaire DNS**, faire un `clic droit` sur le serveur `srv-win`.
+2. Aller dans **Propriétés** > onglet **Indications de racine**.
+
+<details>
+  <summary><strong>📸︲Serveurs racines</strong></summary>
+  <img src=""/>
+</details>
+
+---
+
+# `🧩` ︲ Mission 9 : Configurer un redirecteur
+
+---
+
+## `🎯` ︲ Objectif
+
+Permettre au serveur de résoudre des noms externes (Internet) via un DNS public.
+
+---
+
+## `🛠️` ︲ Procédure
+
+1. Dans les **Propriétés** du serveur DNS, aller sur l'onglet **Redirecteurs**.
+2. Cliquer sur **Modifier** et ajouter l'IP de Google : `8.8.8.8`.
+
+<details>
+  <summary><strong>📸︲Configuration du redirecteur</strong></summary>
+  <img src=""/>
+</details>
+
+---
+
+# `🧩` ︲ Mission 10 : Gérer la zone inversée (PTR)
+
+---
+
+## `🎯` ︲ Objectif
+
+Assurer la résolution inverse (IP vers Nom) en créant des enregistrements PTR.
+
+---
+
+## `🛠️` ︲ Procédure
+
+1. Dans **Zones de recherche inversée**, vérifier que la zone `192.168.0.x` existe.
+2. Ajouter un nouvel enregistrement **Pointeur (PTR)**.
+3. Faire pointer l'IP `192.168.0.3` vers le nom `srv-web.galcosmetic.fr`.
+
+<details>
+  <summary><strong>📸︲Enregistrement PTR</strong></summary>
+  <img src=""/>
+</details>
+
+## `👉` ︲ Vérification
+```cmd
+nslookup 192.168.0.3
+```
+
+---
+
+# `🧩` ︲ Mission 11 : Louer un nom de domaine
+
+---
+
+## `🎯` ︲ Objectif
+
+Comprendre les étapes pour acquérir un nom de domaine réel.
+
+---
+
+## `🛠️` ︲ Étapes théoriques
+
+1. Choisir un **Registrar** (ex: OVH, Gandi).
+2. Vérifier la disponibilité du nom.
+3. Configurer les **Serveurs de noms (NS)** pour pointer vers votre infrastructure.
+
+---
+
+# `🧩` ︲ Mission 12 : DNS sous Linux (Bind9)
+
+---
+
+## `🎯` ︲ Objectif
+
+Installer et tester un service DNS alternatif sous Debian.
+
+---
+
+## `🛠️` ︲ Procédure
+
+1. Installation du paquet :
+```bash
+sudo apt update && sudo apt install bind9 -y
+```
+2. Configuration des fichiers dans `/etc/bind/`.
+
+<details>
+  <summary><strong>📸︲Installation Bind9</strong></summary>
+  <img src=""/>
 </details>
 
 ---
