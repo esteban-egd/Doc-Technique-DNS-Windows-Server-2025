@@ -1,6 +1,6 @@
 # `🌐` ︲ Documentation TP : Installer et configurer un service DNS
 
-Ce dépôt présente une documentation technique détaillée sur la mise en place d'un serveur DNS sur Windows Server 2022 : configuration des zones de recherche directe et inversée, création d'enregistrements d'hôtes (A), d'alias (CNAME) et mise en place de la redondance avec un serveur DNS secondaire.
+Ce dépôt présente une documentation technique détaillée sur la mise en place d'un serveur DNS sur Windows Server 2025 : configuration des zones de recherche directe et inversée, création d'enregistrements d'hôtes (A), d'alias (CNAME) et mise en place de la redondance avec un serveur DNS secondaire.
 
 ---
 
@@ -13,13 +13,14 @@ Ce dépôt présente une documentation technique détaillée sur la mise en plac
 - [🧩 ︲ Mission 2 : Préparer le serveur Web](#mission2)
 - [🧩 ︲ Mission 3 : Tester le fonctionnement du serveur Web](#mission3)
 - [🧩 ︲ Mission 4 : Configurer le service DNS](#mission4)
+- [🧩 ︲ Mission 5 : Créer des hôtes et tester leur fonctionnement](#mission5)
 - [🧩 ︲ Mission 6 : Créer des alias (CNAME)](#mission6)
-- [🧩 ︲ Mission 7 : Analyser le fichier de zone DNS](#mission7)
-- [🧩 ︲ Mission 8 : Observer les serveurs racines](#mission8)
-- [🧩 ︲ Mission 9 : Configurer un redirecteur](#mission9)
-- [🧩 ︲ Mission 10 : Gérer la zone inversée (PTR)](#mission10)
+- [🧩 ︲ Mission 7 : Observer et analyser le fichier de configuration DNS](#mission7)
+- [🧩 ︲ Mission 8 : Observer le référencement des serveurs racines](#mission8)
+- [🧩 ︲ Mission 9 : Configurer un redirecteur DNS](#mission9)
 - [🧩 ︲ Mission 11 : Louer un nom de domaine](#mission11)
-- [🧩 ︲ Mission 12 : DNS sous Linux (Bind9)](#mission12)
+- [🧩 ︲ Mission 12 : Identifier les adresses IP de serveurs](#mission12)
+- [📖 ︲ Concepts DNS](#concepts-dns)
 
 ---
 
@@ -39,8 +40,8 @@ Ce dépôt présente une documentation technique détaillée sur la mise en plac
 > [!IMPORTANT]
 > **Présentation des outils et prérequis :**
 >
-> - `🖥️` ︱ **Serveur principal :** Windows Server 2022 — `srv-win` — `192.168.0.1`
-> - `🖥️` ︱ **Serveur secondaire :** Windows Server 2022 — `srv-win2` — `192.168.0.2`
+> - `🖥️` ︱ **Serveur principal :** Windows Server 2025 — `srv-win` — `192.168.0.1`
+> - `🖥️` ︱ **Serveur secondaire :** Windows Server 2025 — `srv-win2` — `192.168.0.2`
 > - `🌍` ︱ **Serveur Web 1 :** Linux/Apache — `srv-web` — `192.168.0.3`
 > - `🌍` ︱ **Serveur Web 2 :** Linux/Apache — `srv-web2` — `192.168.0.4`
 > - `🗄️` ︱ **Serveur BDD 1 :** `srv-bd` — `192.168.0.5`
@@ -399,176 +400,330 @@ Créer les zones de recherche directe et inversée pour le domaine `galcosmetic.
 
 ---
 
+# `🧩` ︲ Mission 5 : Créer des hôtes et tester leur fonctionnement
+
+## `🎯` ︲ Objectif
+
+Créer les enregistrements d'hôtes (A) pour les serveurs Web et valider la résolution DNS (directe et inverse) entre le serveur et le client.
+
+---
+
+## `🛠️` ︲ Étape 1 : Création d'hôtes pour les serveurs Web
+
+1. Ouvrir le **Gestionnaire DNS** sur le serveur `srv-win`.
+2. Développer les **Zones de recherche directes** et faire un `clic droit` sur `galcosmetic.fr`.
+3. Sélectionner **Nouvel hôte (A ou AAAA)...**.
+4. Dans la fenêtre qui s'affiche, saisir :
+   - Nom : `srv-web` (le nom de domaine complet (FQDN) sera `srv-web.galcosmetic.fr.`)
+   - Adresse IP : `192.168.0.3`
+5. Laisser cochée l'option **Créer un pointeur d'enregistrement (PTR) associé**.
+6. Cliquer sur **Ajouter un hôte**.
+
+> [!NOTE]
+> **FQDN (Fully Qualified Domain Name)** : Un nom de domaine complet qui indique la position absolue du nœud dans l'arborescence DNS.
+> **PTR (Pointer Record)** : C'est l'enregistrement de la zone inversée qui permet de trouver le nom d'un hôte à partir de son adresse IP.
+
+<details>
+  <summary><strong>📸︲Création de l'hôte srv-web</strong></summary>
+  <img src="captures/image.png"/>
+  <br>
+  <img src="captures/image2.png"/>
+</details>
+<details>
+  <summary><strong>📸︲Confirmation de la création de l'hôte srv-web</strong></summary>
+  <img src="captures/image3.png"/>
+</details>
+
+---
+
+## `🛠️` ︲ Étape 2 : Tests de résolution locale depuis le serveur
+
+Sur `srv-win`, ouvrir une invite de commandes et lancer le test de résolution :
+
+```cmd
+nslookup srv-web.galcosmetic.fr
+```
+
+>[!NOTE]
+> Le **serveur par défaut** (192.168.0.1) répond à la requête et renvoie l'adresse IP associée (`192.168.0.3`). La résolution DNS locale fonctionne.
+
+<details>
+  <summary><strong>📸︲Test nslookup (Serveur)</strong></summary>
+  <img src="captures/image4.png"/>
+</details>
+
+---
+
+## `🛠️` ︲ Étape 3 : Tests de connectivité et DNS depuis le client
+
+Depuis le client **Windows 11** :
+
+1. Tester la résolution de nom avec `nslookup` :
+
+```cmd
+nslookup srv-web.galcosmetic.fr
+```
+
+>[!NOTE]
+> C'est bien `srv-win` (`192.168.0.1`) qui est interrogé et qui fournit la bonne IP.
+
+<details>
+<summary><strong>📸︲Test nslookup (Client)</strong></summary>
+<img src="captures/image5.png"/>
+</details>
+
+---
+
+2. Sur Wireshark, démarrer une capture sur l'interface Ethernet du poste client. sur le port `53`.
+3. Dans un **navigateur web**, accéder au site via son FQDN :
+```text
+http://srv-web.galcosmetic.fr
+```
+4. Arrêter la capture et repérer la première trame `DNS query`. Observer le champ `Domain Name System`. et faire un `clic droit` sur l'attribut `Transaction ID`, sélectionné `Appliquer comme un filtre` puis `Sélectionné`
+
+<details>
+  <summary><strong>📸︲Lancement capture Wireshark</strong></summary>
+  <img src="captures/image7.png"/>
+</details>
+
+<details>
+  <summary><strong>📸︲Accès au site via FQDN</strong></summary>
+  <img src="captures/image6.png"/>
+</details>
+
+<details>
+  <summary><strong>📸︲Arrêt de la capture Wireshark</strong></summary>
+  <img src="captures/image8.png"/>
+</details>
+
+---
+
+## `🛠️` ︲ Étape 4 : Test de ping entre les machines
+
+1. Tester le ping vers le serveur web `srv-web.galcosmetic.fr` avec le FQDN :
+
+```cmd
+ping srv-web.galcosmetic.fr
+```
+
+> [!NOTE]
+> Nous obtenons cette réponse grâce à la configuration de la zone de recherche directe dans laquelle l'hote à été associé au nom de domaine.
+
+<details>
+  <summary><strong>📸︲Test ping (Client)</strong></summary>
+  <img src="captures/image9.png"/>
+</details>
+
+---
+
+1. Tester le ping vers le serveur `srv-web` avec son adresse IP et l'option `-a` :
+
+```cmd
+ping -a 192.168.0.3
+```
+
+> [!NOTE]
+> Nous obtenons cette réponse grâce à la configuration des enregistrements DNS `A` et `PTR`.
+
+> [!NOTE]
+> La commande ping -a 192.168.0.3 permet de tester la connectivité vers le serveur Web et de résoudre son nom d’hôte à partir de son adresse IP, en utilisant le DNS
+
+<details>
+  <summary><strong>📸︲Test ping (Client)</strong></summary>
+  <img src="captures/image10.png"/>
+</details>
+
+---
+
 # `🧩` ︲ Mission 6 : Créer des alias (CNAME)
 
+## `🎯` ︲ Objectif
+
+Créer des alias permettant d'accéder au même serveur web avec différents noms (`www` et `spike`).
+
 ---
+
+## `🛠️` ︲ Étape 1 : Création des alias CNAME
+
+1. Dans le **Gestionnaire DNS**, faire un `clic droit` sur la zone `galcosmetic.fr` et sélectionner **Nouvel alias (CNAME)**.
+2. Pour le premier alias :
+   - Nom de l'alias : `www`
+   - Nom de domaine complet (FQDN) de l'hôte cible : `srv-web.galcosmetic.fr`
+3. Répéter l'opération pour l'alias `spike` pointant vers la même cible.
+
+<details>
+  <summary><strong>📸︲Création des alias CNAME (www)</strong></summary>
+  <img src="captures/image11.png"/>
+  <br>
+  <img src="captures/image12.png"/>
+</details>
+
+<details>
+  <summary><strong>📸︲Création des alias CNAME (spike)</strong></summary>
+  <img src="captures/image11.png"/>
+  <br>
+  <img src="captures/image13.png"/>
+</details>
+
+---
+
+## `🛠️` ︲ Étape 2 : Vérification via navigateur
+
+Sur le client Windows 11 :
+
+1. Démarrer une capture sur Wireshark sur le port `53`.
+2. Ouvrir le navigateur et saisir `http://www.galcosmetic.fr`.
+3. Si l'on observe la capture Wireshark correspondante, la requête DNS demande `www.galcosmetic.fr`. Le serveur DNS répond avec le CNAME indiquant que le nom canonique est `srv-web.galcosmetic.fr`.
+4. Faire de même pour `http://spike.galcosmetic.fr`.
+   
+<details>
+  <summary><strong>📸︲Test Alias (www)</strong></summary>
+  <img src="captures/image14.png"/>
+  <br>
+  <img src="captures/image15.png"/>
+</details>
+
+<details>
+  <summary><strong>📸︲Test Alias (spike)</strong></summary>
+  <img src="captures/image16.png"/>
+  <br>
+  <img src="captures/image17.png"/>
+</details>
+
+---
+
+# `🧩` ︲ Mission 7 : Observer et analyser le fichier de configuration DNS
 
 ## `🎯` ︲ Objectif
 
-Créer des alias (CNAME) pour permettre d'accéder au serveur web via différents noms (`www` et `spike`).
+Observer physiquement la structure d'un fichier de zone sur le serveur Windows.
 
 ---
 
 ## `🛠️` ︲ Procédure
 
-1. Dans le **Gestionnaire DNS**, faire un `clic droit` sur la zone `galcosmetic.fr`.
-2. Sélectionner **Nouvel alias (CNAME)**.
-3. Remplir les informations suivantes :
-   - Alias : `www` -> FQDN : `srv-web.galcosmetic.fr`
-   - Alias : `spike` -> FQDN : `srv-web.galcosmetic.fr`
+1. Sur `srv-win`, se rendre dans le répertoire système : `C:\Windows\System32\dns`.
+2. Ouvrir le fichier de zone `galcosmetic.fr.dns` avec le `Bloc-notes`.
+3. Analyser le contenu. On y retrouve l'ensemble des enregistrements en mode texte :
+   - Le `SOA` (Start Of Authority).
+   - Les enregistrements `A` créés précédemment (`srv-web`).
+   - Les enregistrements `CNAME` (`www`, `spike`).
 
 <details>
-  <summary><strong>📸︲Création des alias CNAME</strong></summary>
-  <img src=""/>
+  <summary><strong>📸︲Fichier de zone DNS</strong></summary>
+  <img src="captures/image18.png"/>
 </details>
 
-## `👉` ︲ Vérification
-
-Tester la résolution depuis le client Windows 11 :
-```cmd
-nslookup www.galcosmetic.fr
-```
-
 ---
 
-# `🧩` ︲ Mission 7 : Analyser le fichier de zone DNS
-
----
+# `🧩` ︲ Mission 8 : Observer le référencement des serveurs racines
 
 ## `🎯` ︲ Objectif
 
-Visualiser comment Windows stocke les informations de zone en format texte.
+Visualiser les serveurs racines par défaut du serveur DNS.
 
 ---
 
 ## `🛠️` ︲ Procédure
 
-1. Se rendre dans le dossier : `C:\Windows\System32\dns`.
-2. Ouvrir le fichier `galcosmetic.fr.dns` avec le **Bloc-notes**.
+1. Dans le **Gestionnaire DNS**, faire un `clic droit` sur le nom du serveur `srv-win` et cliquer sur **Propriétés**.
+2. Se rendre dans l'onglet **Indications de racine**.
+3. On y retrouve la liste des 13 serveurs racines mondiaux (nommés de `a.root-servers.net` à `m.root-servers.net`) contenant les informations pour les domaines de premier niveau (TLD).
+
+> [!NOTE]
+>Les serveurs racine sont le point de départ de la résolution DNS : ils indiquent au serveur DNS (ou résolveur) vers quels serveurs de domaine de premier niveau (TLD) aller (.com, .fr, etc.).
+>La racine DNS est représentée par le point . (Souvent implicite) à la fin d’un FQDN, par exemple example.com.
 
 <details>
-  <summary><strong>📸︲Analyse du fichier de zone</strong></summary>
-  <img src=""/>
+  <summary><strong>📸︲Indications de racine</strong></summary>
+  <img src="captures/image19.png"/>
 </details>
 
 ---
 
-# `🧩` ︲ Mission 8 : Observer les serveurs racines
-
----
+# `🧩` ︲ Mission 9 : Configurer un redirecteur DNS
 
 ## `🎯` ︲ Objectif
 
-Identifier les serveurs DNS racines (Root Hints) configurés par défaut.
+Permettre au serveur de résoudre des noms de domaines externes (Internet) en transmettant les requêtes inconnues à un autre serveur DNS.
 
 ---
 
 ## `🛠️` ︲ Procédure
 
-1. Dans le **Gestionnaire DNS**, faire un `clic droit` sur le serveur `srv-win`.
-2. Aller dans **Propriétés** > onglet **Indications de racine**.
+1. Toujours dans les `Propriétés` du serveur `srv-win`, aller dans l'onglet `Redirecteurs`.
+2. Cliquer sur `Modifier` et ajouter l'adresse IP d'un DNS public (ex: l'IP du routeur).
 
 <details>
-  <summary><strong>📸︲Serveurs racines</strong></summary>
-  <img src=""/>
+  <summary><strong>📸︲Configuration d'un redirecteur</strong></summary>
+  <img src="captures/image21.png"/>
+  <br/>
+  <img src="captures/image20.png"/>
 </details>
-
----
-
-# `🧩` ︲ Mission 9 : Configurer un redirecteur
-
----
-
-## `🎯` ︲ Objectif
-
-Permettre au serveur de résoudre des noms externes (Internet) via un DNS public.
-
----
-
-## `🛠️` ︲ Procédure
-
-1. Dans les **Propriétés** du serveur DNS, aller sur l'onglet **Redirecteurs**.
-2. Cliquer sur **Modifier** et ajouter l'IP de Google : `8.8.8.8`.
-
-<details>
-  <summary><strong>📸︲Configuration du redirecteur</strong></summary>
-  <img src=""/>
-</details>
-
----
-
-# `🧩` ︲ Mission 10 : Gérer la zone inversée (PTR)
-
----
-
-## `🎯` ︲ Objectif
-
-Assurer la résolution inverse (IP vers Nom) en créant des enregistrements PTR.
-
----
-
-## `🛠️` ︲ Procédure
-
-1. Dans **Zones de recherche inversée**, vérifier que la zone `192.168.0.x` existe.
-2. Ajouter un nouvel enregistrement **Pointeur (PTR)**.
-3. Faire pointer l'IP `192.168.0.3` vers le nom `srv-web.galcosmetic.fr`.
-
-<details>
-  <summary><strong>📸︲Enregistrement PTR</strong></summary>
-  <img src=""/>
-</details>
-
-## `👉` ︲ Vérification
-```cmd
-nslookup 192.168.0.3
-```
 
 ---
 
 # `🧩` ︲ Mission 11 : Louer un nom de domaine
 
+## `🎯` ︲ Objectif
+
+Comprendre l'utilité d'un Bureau d'enregistrement.
+
 ---
+
+## `🛠️` ︲ Comparatif des registrars
+
+| Fournisseur   | Atouts                                                                                                                       |
+| :------------ | :--------------------------------------------------------------------------------------------------------------------------- |
+| **OVHcloud**  | Leader FR, idéal pour Gal Cosmetic. Domaine .fr/.com à tarif compétitif, remises la 1re année.                               |
+| **Gandi.net** | Expertise et respect de la vie privée. Prix corrects à l’achat, mais renouvellements parfois plus élevés que la moyenne.     |
+| **Namecheap** | Interface simple et tarifs d'appel bas. Bien pour payer peu la 1re année, mais les renouvellements peuvent coûter plus cher. |
+
+---
+
+# `🧩` ︲ Mission 12 : Identifier les adresses IP de serveurs
 
 ## `🎯` ︲ Objectif
 
-Comprendre les étapes pour acquérir un nom de domaine réel.
-
----
-
-## `🛠️` ︲ Étapes théoriques
-
-1. Choisir un **Registrar** (ex: OVH, Gandi).
-2. Vérifier la disponibilité du nom.
-3. Configurer les **Serveurs de noms (NS)** pour pointer vers votre infrastructure.
-
----
-
-# `🧩` ︲ Mission 12 : DNS sous Linux (Bind9)
-
----
-
-## `🎯` ︲ Objectif
-
-Installer et tester un service DNS alternatif sous Debian.
+Utiliser la commande `host` pour identifier les IP ou DNS faisant autorité sur un domaine précis.
 
 ---
 
 ## `🛠️` ︲ Procédure
 
-1. Installation du paquet :
+Dans un environnement Linux, la commande `host` permet d'interroger directement les serveurs DNS. L'option `-t ns` permet de lister les **Name Servers**.
+
+Exemple d'utilisation :
 ```bash
-sudo apt update && sudo apt install bind9 -y
+host -t A www.galcosmetic.fr
 ```
-2. Configuration des fichiers dans `/etc/bind/`.
+afin de retourner l'ip du serveur web `www.galcosmetic.fr`.
 
 <details>
-  <summary><strong>📸︲Installation Bind9</strong></summary>
-  <img src=""/>
+  <summary><strong>📸︲Enregistrements NS</strong></summary>
+  <img src="captures/image22.png"/>
+  <br/>
+  <img src="captures/image24.png"/>
+  <br/>
+  <img src="captures/image25.png"/>
+  <br/>
+  <img src="captures/image26.png"/>
 </details>
 
+<details>
+  <summary><strong>📸︲Enregistrements SOA</strong></summary>
+  <img src="captures/image27.png"/>
+  <br/>
+  <img src="captures/image28.png"/>
+  <br/>
+  <img src="captures/image29.png"/>
+  <br/>
+  <img src="captures/image30.png"/>
+</details>
 ---
 
-# `📖` ︲ Généralités et Concepts DNS
+
+# `📖` ︲ Concepts DNS
 
 ## `🔍` ︲ Rôles des zones Directe et Inversée
 
