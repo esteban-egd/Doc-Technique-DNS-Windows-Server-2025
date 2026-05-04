@@ -496,7 +496,7 @@ http://srv-web.galcosmetic.fr
 
 <details>
   <summary><strong>📸︲Accès au site via FQDN</strong></summary>
-  <img src="captures/image6.png"/>
+  <img src="captures/image6.PNG"/>
 </details>
 
 <details>
