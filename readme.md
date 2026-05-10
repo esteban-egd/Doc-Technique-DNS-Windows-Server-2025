@@ -121,6 +121,8 @@ Renommer le serveur, installer le rôle DNS et configurer le serveur pour qu'il 
 <details>
   <summary><strong>📸︲Renommage du serveur</strong></summary>
   <img src="captures/2026-03-25 12_06_10-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
+  <br>
+  <img src="captures/2026-05-10 13_51_19-GALL COSMETIC - Windows Serveur 2025 sur STBN-DELL5510 - Connexion à un ordinate.png"/>
 </details>
 
 ## `🛠️` ︲ Étape 2 : Installer le rôle DNS
